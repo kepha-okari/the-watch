@@ -1,0 +1,32 @@
+
+{% extends 'base.html' %}
+{% load static%}
+<!-- Styles block -->
+{% block styles %}
+
+    {{block.super}}
+      <link rel="stylesheet" href="{% static 'css/index.css'%}">
+
+{% endblock %}
+
+ {% block content %}
+
+   <div class="col-md-1">
+
+   </div>
+
+
+      <section class="no-touch col-md-5">
+
+
+      </section>
+
+      <section class="col-md-5 col-sm-12">
+    
+      </section>
+      <hr style="color:rgb(19, 175, 167);">
+        <hr style="color:red">
+
+
+
+{% endblock %}

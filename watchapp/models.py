@@ -16,7 +16,7 @@ class Neighborhood(models.Model):
 
     def create_neighborhood(self):
         '''
-        Methods that saves a new neighborhood
+        Metuserhods that saves a new neighborhood
         '''
         self.save()
 
@@ -35,9 +35,9 @@ class Neighborhood(models.Model):
     @classmethod
     def get_specific_hood(cls,id):
         '''
-        fetches particular hooddeletes an exiting neighborhood
+        fetches particular hood in the exiting neighborhood
         '''
-        chosen_hood = Neighborhood.objects.filter(id=id)
+        chosen_hood = cls.objects.filter(id=id)
         return chosen_hood
 
     def update_neighborhood(self):
@@ -59,17 +59,27 @@ class Neighborhood(models.Model):
         '''
         Method to search for a particular neighbourhood
         '''
-        query = cls.objects.filter(pass__icontains=search_term)
+        query = cls.objects.filter(name__icontains=search_term)
         return query
 
 class Business(models.Model):
     '''
     A class that defines the business blueprint
     '''
+    cover_image = models.ImageField(upload_to = 'business/', null=True, blank=True)
     business_name = models.CharField(max_length =30,null=True)
     email =  models.EmailField(max_length=70,blank=True)
-    hoodNeighborhood_id = models.ForeignKey(Neighborhood,on_delete=models.CASCADE,null=True,blank=True)
+    hood_id = models.ForeignKey(Neighborhood,on_delete=models.CASCADE,null=True,blank=True)
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+
+    @classmethod
+    def get_specific_business(cls,id):
+        '''
+        fetches particular hooddeletes an exiting neighborhood
+        '''
+        business = cls.objects.filter(id=id)
+        return business
+
 
 class Profile(models.Model):
     '''

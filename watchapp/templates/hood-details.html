@@ -17,24 +17,10 @@
         <!-- Create Post form -->
         <section class="col-md-5 col-sm-12">
           <div class="col-md-8 col-lg-8">
-
-                <p>{{details.population}}</p>
-                <p>{{details.neighborhood_name}}</p>
-                <p>{{details.id}}</p>
-                <p>{{exists.estate.id}}</p>
-
-                {% if exists.estate.id == details.id %}
-                <a href=" {% url 'follow' details.id%}">
-                     <button type="button" name="button" class="btn btn-primary btn-md  pull-right  ">Relocate </button>
-                </a>
-                {% else %}
-                <a href=" {% url 'follow' details.id%}">
-                     <button type="button" name="button" class="btn btn-primary btn-md  pull-right  ">Move Here</button>
-                </a>
-
-                {% endif %}
-
-
+            {% for info in details %}
+                <p>{{info.population}}</p>
+                <p>{{info.neighborhood_name}}</p>
+            {% endfor %}
           </div>
         </section>
 

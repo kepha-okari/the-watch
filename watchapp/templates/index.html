@@ -11,26 +11,12 @@
 
  {% block content %}
 
-      <section class="col-md-4 col-sm-12">
+      <section class="col-md-5 col-sm-12">
           {% for hood in hoods %}
             <p>{{hood}}</p>
           {% endfor %}
       </section>
 
-      <section class="col-md-4 col-sm-12">
-          {% for post in posts %}
-            <p>{{post.message}}</p>
-          {% endfor %}
-      </section>
-
-
-      <section class="col-md-4 col-sm-12">
-        {% for biz in business %}
-        <a href="{% url 'business' biz.id %}">
-          <p>{{biz.business_name}}</p>
-        </a>
-        {% endfor %}
-      </section>
 
 
 

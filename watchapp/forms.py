@@ -19,3 +19,11 @@ class PostMessageForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['image','image_name', 'message']
+
+class PostBusinessForm(forms.ModelForm):
+    '''
+    Class to create a form for an authenticated user to post a business
+    '''
+    class Meta:
+        model = Business
+        fields = ['cover_image','business_name', 'email']

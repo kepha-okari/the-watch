@@ -1,10 +1,10 @@
 from django.shortcuts import render,redirect
 from django.http import Http404, HttpResponse
-from django.core.exceptions import ObjectDoesNotExist
+# from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import Neighborhood,Post,Business,Profile
-from .forms import NeighborhoodForm,PostMessageForm,PostBusinessForm
+from .models import Neighborhood,Post,Business,Profile,Follow
+from .forms import NeighborhoodForm,PostMessageForm,PostBusinessForm,ProfileForm
 
 from wsgiref.util import FileWrapper
 import mimetypes
@@ -18,8 +18,9 @@ def index(request):
     title = 'Timeline'
 
     hoods = Neighborhood.get_neighborhoods
-
-    return render(request, 'index.html', {"title": title, "user": current_user, "hoods":hoods })
+    business = Business.get_businesses
+    posts = Post.get_posts
+    return render(request, 'index.html', {"title": title,"user": current_user,"posts":posts,"business": business,  "hoods":hoods })
 
 
 
@@ -63,8 +64,9 @@ def hood_details(request, hood_id):
     View function to view details of a hood
     '''
     details = Neighborhood.get_specific_hood(hood_id)
+    exists = Follow.objects.all().get(user=request.user)
 
-    return render(request, 'hood-details.html',{"details":details})
+    return render(request, 'hood-details.html',{"exists": exists,"details":details})
 
 
 @login_required(login_url='/accounts/login')
@@ -121,3 +123,51 @@ def business_details(request, business_id):
     details = Business.get_specific_business(business_id)
 
     return render(request, 'business-details.html',{"details":details})
+
+
+
+
+#****************************************************PROFILE********************************************************************
+
+
+@login_required(login_url='/accounts/login')
+def create_profile(request):
+    '''
+    View function to view details of a hood
+    '''
+    current_user = request.user
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES)
+        if form.is_valid:
+            post = form.save(commit=False)
+            post.user = current_user
+            post.save()
+            return redirect(index)
+
+    else:
+        form = ProfileForm()
+    return render(request, 'create-profile.html', {"form":form})
+
+
+@login_required(login_url='/accounts/login')
+def follow(request,hood_id):
+    '''
+    class method to allow user move to a different neighborhood_name
+    '''
+    current_user = request.user
+    estate = Neighborhood.objects.get(id=hood_id)
+
+    following = Follow(user=current_user, estate=estate)
+
+    if_following_estate = len(Follow.objects.all().filter(user=current_user))
+
+    if if_following_estate > 0:
+
+        Follow.objects.all().filter(user=current_user).delete()
+        Follow.objects.update_or_create(user=current_user, estate=estate)
+        # following.save()
+    else:
+        following.save()
+
+    return redirect(index)

@@ -25,6 +25,20 @@ class Neighborhood(models.Model):
         Methods that deletes an exiting neighborhood
         '''
         self.delete()
+    @classmethod
+    def get_neighborhoods(cls):
+        '''
+        Methods that fetches all hoods
+        '''
+        estates = Neighborhood.objects.all()
+        return estates
+    @classmethod
+    def get_specific_hood(cls,id):
+        '''
+        fetches particular hooddeletes an exiting neighborhood
+        '''
+        chosen_hood = Neighborhood.objects.filter(id=id)
+        return chosen_hood
 
     def update_neighborhood(self):
         '''
@@ -54,7 +68,8 @@ class Business(models.Model):
     '''
     business_name = models.CharField(max_length =30,null=True)
     email =  models.EmailField(max_length=70,blank=True)
-    hood_id = models.ForeignKey(User,on_delete=models.CASCADE)
+    hoodNeighborhood_id = models.ForeignKey(Neighborhood,on_delete=models.CASCADE,null=True,blank=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
 
 class Profile(models.Model):
     '''
@@ -62,6 +77,7 @@ class Profile(models.Model):
     '''
     profile_photo = models.ImageField(upload_to = 'profiles/', null=True)
     name = models.CharField(max_length =30,null=True)
+    estate = models.ForeignKey(Neighborhood,on_delete=models.CASCADE, null=True,blank=True)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
 
 

@@ -13,7 +13,9 @@
 
       <section class="col-md-5 col-sm-12">
           {% for hood in hoods %}
+          <a href="{% url 'pickHood' hood.id %}">
             <p>{{hood}}</p>
+          </a>
           {% endfor %}
       </section>
 

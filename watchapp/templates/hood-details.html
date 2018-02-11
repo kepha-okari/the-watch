@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static%}
+{% load bootstrap3 %}
+
+
+<!-- Styles block -->
+{% block styles %}
+    {{block.super}}
+    <link rel="stylesheet" href="{% static 'css/new-post.css'%}">
+{% endblock %}
+
+<!-- Content block -->
+{% block content %}
+    {{block.super}}
+    <div class="container">
+
+        <!-- Create Post form -->
+        <section class="col-md-5 col-sm-12">
+          <div class="col-md-8 col-lg-8">
+            {% for info in details %}
+                <p>{{info.population}}</p>
+                <p>{{info.neighborhood_name}}</p>
+            {% endfor %}
+          </div>
+        </section>
+
+
+
+    </div>
+
+{% endblock %}
+
+<!-- Create Post form -->
+<div class="col-md-8 col-lg-8">
+    <p>{{details.population}}</p>
+      <p>{{details.neighborhood_name}}</p>
+</div>

@@ -10,7 +10,10 @@ urlpatterns = [
     url(r'^all/hoods/',views.view_neighborhoods, name='allHoods'),
     url(r'^neighborhood/(\d+)',views.hood_details, name='pickHood'),
     url(r'^new/post/',views.post_message, name='message'),
-    url(r'^update/profile/', views.create_profile, name="createProfile"),
+    url(r'^new/business/',views.create_business, name='newBusiness'),
+    url(r'^business/(\d+)',views.business_details, name='business'),
+
+    # url(r'^update/profile/', views.create_profile, name="createProfile"),
     # url(r'^other/profile/(\d+)',views.other_profile, name='otherProfile'),
     # url(r'^post/',views.new_post, name='postImage'),
     # url(r'^manage/(\d+)',views.manage_image, name='manageImage'),

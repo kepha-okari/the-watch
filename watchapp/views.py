@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Neighborhood,Post,Business,Profile
-from .forms import NeighborhoodForm,PostMessageForm
+from .forms import NeighborhoodForm,PostMessageForm,PostBusinessForm
 
 from wsgiref.util import FileWrapper
 import mimetypes
@@ -20,6 +20,11 @@ def index(request):
     hoods = Neighborhood.get_neighborhoods
 
     return render(request, 'index.html', {"title": title, "user": current_user, "hoods":hoods })
+
+
+
+#*****************************************************NEIGHBORHOOD FUNCTIONS***************************************************
+
 def view_neighborhoods(request):
     # images = Image.get_images()
     current_user = request.user
@@ -59,8 +64,6 @@ def hood_details(request, hood_id):
     '''
     details = Neighborhood.get_specific_hood(hood_id)
 
-
-
     return render(request, 'hood-details.html',{"details":details})
 
 
@@ -85,8 +88,36 @@ def post_message(request):
     return render(request, 'new-message.html', {"form":form})
 
 
+
+#*****************************************************BUSINESS FUNCTIONS***************************************************
+
 @login_required(login_url='/accounts/login')
-def create_profile(request):
+def create_business(request):
     '''
-    View function to create a profile
+    View function to post a message
     '''
+    current_user = request.user
+
+    if request.method == 'POST':
+        form = PostBusinessForm(request.POST, request.FILES)
+        if form.is_valid:
+            post = form.save(commit=False)
+            post.user = current_user
+            # post.profile = current_user.id
+            post.save()
+            return redirect(index)
+
+    else:
+        form = PostBusinessForm()
+    return render(request, 'new-business.html', {"form":form})
+
+
+
+@login_required(login_url='/accounts/login')
+def business_details(request, business_id):
+    '''
+    View function to view details of a hood
+    '''
+    details = Business.get_specific_business(business_id)
+
+    return render(request, 'business-details.html',{"details":details})

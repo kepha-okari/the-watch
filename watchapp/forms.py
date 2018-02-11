@@ -12,6 +12,8 @@ class NeighborhoodForm(forms.ModelForm):
         model = Neighborhood
         fields = ['neighborhood_name','neighborhood_location', 'population']
 
+#*************************************************************************************************************
+
 class PostMessageForm(forms.ModelForm):
     '''
     Class to create a form for an authenticated user to post a message
@@ -20,6 +22,7 @@ class PostMessageForm(forms.ModelForm):
         model = Post
         fields = ['image','image_name', 'message']
 
+#********************************************************************************************************
 class PostBusinessForm(forms.ModelForm):
     '''
     Class to create a form for an authenticated user to post a business
@@ -27,3 +30,12 @@ class PostBusinessForm(forms.ModelForm):
     class Meta:
         model = Business
         fields = ['cover_image','business_name', 'email']
+
+#*************************************************************************************************************
+class ProfileForm(forms.ModelForm):
+    '''
+    Class to create a form for an authenticated user to update profile
+    '''
+    class Meta:
+        model = Profile
+        fields = ['profile_photo','name']

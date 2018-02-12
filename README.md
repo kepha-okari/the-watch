@@ -9,18 +9,12 @@
 * post image/message on the board
 * view information regarding his/her neighbourhood
 * move to new hood when need be
-* has a profile
+* have a profile
 * comment on a post
 
 
 ## User Stories
 As a user I would like:
-* to sign in to use the application
-* to upload photos/messages
-* to see my profile update it
-* see messeges relevant to my neighbourhood
-* comment on a post
-
 * Sign in with the application to start using.
 * Set up a profile about me and a general location and my neighborhood name.
 * Find a list of different businesses in my neighborhood.

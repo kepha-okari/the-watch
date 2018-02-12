@@ -2,6 +2,7 @@ from django.db import models
 import datetime as dt
 from django.contrib.auth.models import User
 
+
 class Neighborhood(models.Model):
     '''
     A class that defines the blueprint of a Neighborhood model
@@ -37,7 +38,7 @@ class Neighborhood(models.Model):
         '''
         fetches particular hood in the exiting neighborhood
         '''
-        chosen_hood = cls.objects.filter(id=id)
+        chosen_hood = cls.objects.get(id=id)
         return chosen_hood
 
     def update_neighborhood(self):
@@ -69,8 +70,11 @@ class Business(models.Model):
     cover_image = models.ImageField(upload_to = 'business/', null=True, blank=True)
     business_name = models.CharField(max_length =30,null=True)
     email =  models.EmailField(max_length=70,blank=True)
-    hood_id = models.ForeignKey(Neighborhood,on_delete=models.CASCADE,null=True,blank=True)
+    estate = models.ForeignKey(Neighborhood,on_delete=models.CASCADE,null=True,blank=True)
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+
+    def __str__(self):
+        return self.business_name
 
     @classmethod
     def get_specific_business(cls,id):
@@ -79,6 +83,25 @@ class Business(models.Model):
         '''
         business = cls.objects.filter(id=id)
         return business
+
+
+    @classmethod
+    def get_businesses(cls):
+        '''
+        fetches particular hooddeletes an exiting neighborhood
+        '''
+        business = cls.objects.all()
+        return business
+
+    @classmethod
+    def get_business_by_estate(cls,hood_id):
+        '''
+        Method that gets all posts in a specific neighbourhood from the database
+        Returns:
+            messages : list of post objects from the database
+        '''
+        messages = cls.objects.all().filter(estate=hood_id)
+        return messages
 
 
 class Profile(models.Model):
@@ -90,8 +113,14 @@ class Profile(models.Model):
     estate = models.ForeignKey(Neighborhood,on_delete=models.CASCADE, null=True,blank=True)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.name
 
-    pass
+
+
+
+
+
 class Post(models.Model):
     '''
     A class that defines posts of the users
@@ -100,14 +129,16 @@ class Post(models.Model):
     image_name = models.CharField(max_length=30)
     message =models.TextField(max_length = 100, null =True,blank=True)
     date_uploaded = models.DateTimeField(auto_now_add=True, null=True)
-    profile = models.ForeignKey(Profile,null =True,blank=True, on_delete=models.CASCADE)
+    estate = models.ForeignKey(Neighborhood,null =True,blank=True, on_delete=models.CASCADE)
     user = models.ForeignKey(User)
 
     class Meta:
         ordering = ['-date_uploaded']
 
     def save_post(self):
-        '''Method to save an post in the database'''
+        '''
+        Method to save an post in the database
+        '''
         self.save()
 
     def delete_post(self):
@@ -119,7 +150,37 @@ class Post(models.Model):
         '''
         Method that gets all posts from the database
         Returns:
-            images : list of post objects from the database
+            messages : list of post objects from the database
         '''
-        messages = Post.objects.all()
+        messages = cls.objects.all()
         return messages
+
+    @classmethod
+    def get_posts_by_estate(cls,hood_id):
+        '''
+        Method that gets all posts in a specific neighbourhood from the database
+        Returns:
+            messages : list of post objects from the database
+        '''
+        messages = cls.objects.all().filter(estate=hood_id)
+        return messages
+
+
+
+
+
+class Follow(models.Model):
+    '''
+    Class that store a User and Profile follow neighborhood news
+    '''
+    user = models.ForeignKey(User)
+    estate = models.ForeignKey(Neighborhood)
+
+
+    def __str__(self):
+        return self.user.username
+
+    @classmethod
+    def get_following(cls,user_id):
+        following =  Follow.objects.filter(user=user_id).all()
+        return following

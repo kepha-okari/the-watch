@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^business/(\d+)',views.business_details, name='business'),
     url(r'^create/profile/', views.create_profile, name='createProfile'),
     url(r'^follow/(\d+)', views.follow, name='follow'),
+    url(r'^unfollow/(\d+)', views.unfollow, name='unfollow'),
     # url(r'^other/profile/(\d+)',views.other_profile, name='otherProfile'),
     # url(r'^post/',views.new_post, name='postImage'),
     # url(r'^manage/(\d+)',views.manage_image, name='manageImage'),

@@ -10,14 +10,12 @@
   <nav class="navbar navbar-default" style="margin-top:0px; width:100%;">
     <div class="container-fluid">
       <div class="navbar-header col-sm-12 col-md-4 ">
-          <a href="#" class="navbar-brand siteIcon">
-              <i class="fa fa-instagram 2x" aria-hidden="true"></i>
-            </a>
+        
             <div class="" style="margin-top:15px;">
           </a>
 
           <a class="navbar-brand" href="#">
-
+                HoodWatch
           <a href="#" id="instTitle" style=" margin-left:10px;color:rgb(19, 175, 167); padding-top:50px; margin-right:20px;font-size:25px;">
             {{user}}
           </a>
@@ -88,10 +86,14 @@
           </div>
 
 
-
           <div class="col-6" >
 
 
+
+
+              <a href="{% url 'message'}""  id="instTitle" style="float:right; margin-left:10px; margin-top:10px; font-size:15px;">
+                <span  style="color:red"> {{user}}</span>
+              </a>
 
               <a href="#" id="instTitle" style="float:right; margin-left:10px; margin-top:10px;font-size:25px;">
                   <span class="glyphicon glyphicon-user" style="color:rgb(11, 125, 150)"></span>
@@ -105,7 +107,7 @@
                   <span class="glyphicon glyphicon-home" style="color:red"></span>
               </a>
 
-              <a href=" #" style="float:right; margin-left:10px; margin-top:12px;font-size:25px;">
+              <a href="{% url 'message' %}" style="float:right; margin-left:10px; margin-top:12px;font-size:25px;">
                   <span class="glyphicon glyphicon-plus" style="color:green"></span>
               </a>
 

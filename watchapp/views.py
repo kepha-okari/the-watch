@@ -18,9 +18,12 @@ def index(request):
     title = 'Timeline'
 
     hoods = Neighborhood.get_neighborhoods
-    business = Business.get_businesses
-    posts = Post.get_posts
-    return render(request, 'index.html', {"title": title,"user": current_user,"posts":posts,"business": business,  "hoods":hoods })
+
+    est = Follow.objects.get(user=current_user)
+
+    business = Business.get_business_by_estate(est.estate)
+    posts = Post.get_posts_by_estate(est.estate)
+    return render(request, 'index.html', {"est": est,"title": title,"user": current_user,"posts":posts,"business": business,  "hoods":hoods })
 
 
 
@@ -63,9 +66,13 @@ def hood_details(request, hood_id):
     '''
     View function to view details of a hood
     '''
-    details = Neighborhood.get_specific_hood(hood_id)
-    exists = Follow.objects.all().get(user=request.user)
 
+    if len(Follow.objects.all().filter(user=request.user))>0:
+        details = Neighborhood.get_specific_hood(hood_id)
+        exists = Follow.objects.all().get(user=request.user)
+    else:
+        details = Neighborhood.get_specific_hood(hood_id)
+        exists = 0
     return render(request, 'hood-details.html',{"exists": exists,"details":details})
 
 
@@ -75,13 +82,13 @@ def post_message(request):
     View function to post a message
     '''
     current_user = request.user
-
+    est = Follow.objects.get(user=current_user)
     if request.method == 'POST':
         form = PostMessageForm(request.POST, request.FILES)
         if form.is_valid:
             post = form.save(commit=False)
             post.user = current_user
-            post.profile = current_user.id
+            post.estate = est.estate #the estate_id
             post.save()
             return redirect(index)
 
@@ -99,13 +106,14 @@ def create_business(request):
     View function to post a message
     '''
     current_user = request.user
+    est = Follow.objects.get(user=current_user)
 
     if request.method == 'POST':
         form = PostBusinessForm(request.POST, request.FILES)
         if form.is_valid:
             post = form.save(commit=False)
             post.user = current_user
-            # post.profile = current_user.id
+            post.estate = est.estate
             post.save()
             return redirect(index)
 
@@ -153,21 +161,38 @@ def create_profile(request):
 @login_required(login_url='/accounts/login')
 def follow(request,hood_id):
     '''
-    class method to allow user move to a different neighborhood_name
+    View function to allow user move to a different neighborhood_name
     '''
     current_user = request.user
     estate = Neighborhood.objects.get(id=hood_id)
 
     following = Follow(user=current_user, estate=estate)
 
-    if_following_estate = len(Follow.objects.all().filter(user=current_user))
+    # check_if_exist = len(Follow.objects.all().filter(user=current_user))
+    # if check_if_exist > 0:
 
-    if if_following_estate > 0:
+    check_if_exists = Follow.objects.filter(user=current_user).exists()
+
+    if check_if_exists == True:
 
         Follow.objects.all().filter(user=current_user).delete()
         Follow.objects.update_or_create(user=current_user, estate=estate)
         # following.save()
     else:
         following.save()
+
+    return redirect(index)
+
+
+
+@login_required(login_url='/accounts/login')
+def unfollow(request,id):
+    '''
+    View function unfollow other users
+    '''
+    current_user = request.user
+    estate = Neighborhood.objects.get(id=id)
+
+    following = Follow(user=current_user, estate=estate).delete()
 
     return redirect(index)
